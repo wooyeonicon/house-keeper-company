@@ -136,7 +136,7 @@ public class UserController {
                         return new Result(user, "登录成功,你没有签到", 1);
                     }
                 }else{
-                    return new Result(user,"登录成功，已经签过到了",1);
+                    return new Result(user,"登录成功，已---经签过到了",1);
                 }
             }
         }
