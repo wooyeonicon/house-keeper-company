@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yh.company.dao.CheckWorkDao">
+    <resultMap id="BaseResultMap" type="yh.company.entity.CheckWork">
+        <id column="checkwork_id" property="checkworkId"></id>
+        <result column="cuid" property="cuid"></result>
+        <result column="username" property="username"></result>
+        <result column="signin" property="signin"></result>
+        <result column="signout" property="signout"></result>
+        <result column="stat" property="stat"></result>
+    </resultMap>
+    <insert id="insertCheck">
+        insert into checkwork(cuid,username,signin,stat) values (#{cuid},#{username},#{signin},#{stat});
+    </insert>
+    <select id="findById" resultMap="BaseResultMap">
+        select * from checkwork where cuid = #{cuid};
+    </select>
+
+    <update id="updateType">
+        update checkwork set type=2 where signin = #{signin} and cuid = #{cuid};
+    </update>
+
+    <update id="updateOut">
+        update checkwork set signout = #{signout} where cuid = #{cuid} and signin = #{signin};
+    </update>
+
+    <select id="getCheckType" resultType="CheckWork">
+        select * from checkwork where cuid = #{cuid} and signin = #{signin};
+    </select>
+
+    <select id="check" resultType="CheckWork">
+        SELECT * FROM checkwork WHERE cuid = #{cuid} AND checkwork_id = (SELECT MAX(checkwork_id) FROM checkwork);
+    </select>
+
+
+
+</mapper>

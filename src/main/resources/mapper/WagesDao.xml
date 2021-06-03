@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yh.company.dao.WagesDao">
+    <resultMap id="BaseResultMap" type="yh.company.entity.Wages">
+        <id column="wages_id" property="wagesId"></id>
+        <result column="time" property="time"></result>
+        <result column="money" property="money"></result>
+        <result column="basepay" property="basepay"></result>
+        <result column="reward" property="reward"></result>
+        <result column="allowance" property="allowance"></result>
+        <result column="wuid" property="wuid"></result>
+    </resultMap>
+    <insert id="insertWages">
+        insert into wages(wuid,money,basepay,reward,allowance,time) values (#{wuid},#{money},#{basepay},#{reward},#{allowance},#{time});
+    </insert>
+
+    <select id="queryWagesById" resultMap="BaseResultMap">
+        select * from wages where wuid = #{wuid} order by time+0 desc;
+    </select>
+</mapper>

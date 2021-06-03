@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yh.company.dao.TxtDao">
+    <resultMap id="BaseResultMap" type="yh.company.entity.Txt">
+        <id column="txt_id" property="txtId"></id>
+        <result column="user_id" property="userId"></result>
+        <result column="time" property="time"></result>
+        <result column="title" property="title"></result>
+        <result column="message" property="message"></result>
+        <result column="content" property="content"></result>
+    </resultMap>
+    <insert id="addTxt" >
+        insert into txt(user_id,time,title,message,content) values (#{userId},#{time},#{title},#{message},#{content});
+    </insert>
+
+    <delete id="deleteTxt">
+        delete from txt where user_id = #{userId};
+    </delete>
+
+    <select id="queryTxtById" resultType="Txt">
+        select * from txt where txt_id = #{txtId};
+    </select>
+
+    <select id="queryTxtAll" resultMap="BaseResultMap">
+        select * from txt order by time+0 desc;
+    </select>
+</mapper>
