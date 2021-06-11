@@ -141,47 +141,39 @@ public class VacationController {
         String time1 = null,time2 = null,time3 = null,time4 = null;
         long userId = Long.parseLong(request.getHeader("Authorization"));
         List<Vacation> lists = vacationService.queryVacationByState(userId,1);
+        List<Result1> l = new ArrayList<>();
         for(int i=0;i<lists.size();i++){
+            Result1 result1 = new Result1();
             Vacation list =  lists.get(i);
+            //System.out.println("========================================2");
             if(list.getType().equals("事假")){
                 sum1 = Long.valueOf(list.getEndtime())-Long.valueOf(list.getStarttime())+sum1;
                 time1 = String.valueOf(sum1);
-                System.out.println("_______________"+time1+"__________");
+                result1.setTime(time1);
+                result1.setType("事假");
+                //System.out.println("_______________"+time1+"__________");
             }else if(list.getType().equals("病假")){
                 sum2 = Long.valueOf(list.getEndtime())-Long.valueOf(list.getStarttime())+sum2;
                 time2 = String.valueOf(sum2);
-                System.out.println("_______________"+time2+"__________");
+                result1.setTime(time2);
+                result1.setType("病假");
+                //System.out.println("_______________"+time2+"__________");
             }else if(list.getType().equals("产假")){
                 sum3 = Long.valueOf(list.getEndtime())-Long.valueOf(list.getStarttime())+sum3;
                 time3 = String.valueOf(sum3);
-                System.out.println("_______________"+time3+"__________");
+                result1.setTime(time3);
+                result1.setType("产假");
+                //System.out.println("_______________"+time3+"__________");
             }else {
                 sum4 = Long.valueOf(list.getEndtime())-Long.valueOf(list.getStarttime())+sum4;
                 time4 = String.valueOf(sum4);
-                System.out.println("_______________"+time4+"__________");
+                result1.setTime(time4);
+                result1.setType("公司外派假期");
+                //System.out.println("_______________"+time4+"__________");
             }
+            l.add(result1);
         }
-        List<Result1> l = new ArrayList<>();
-        Result1 result1 = new Result1();
-        result1.setTime(time1);
-        result1.setType("事假");
-        Result1 result2 = new Result1();
-        result2.setTime(time2);
-        result1.setType("病假");
-        Result1 result3 = new Result1();
-        result3.setTime(time3);
-        result1.setType("产假");
-        Result1 result4 = new Result1();
-        result4.setTime(time4);
-        result1.setType("公司外派假期");
-        l.add(result1);
-        l.add(result2);
-        l.add(result3);
-        l.add(result4);
-        if(l.isEmpty()){
-            return new Result(null,"失败",0);
-        }else{
-            return new Result(l,"成功",1);
-        }
+        System.out.println("==============================3");
+        return new Result(l,"成功",1);
     }
 }

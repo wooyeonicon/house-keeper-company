@@ -12,6 +12,9 @@ public interface CheckWorkService {
 //    private String signin;
 //    private String signout;
 //    private Date date;
+    CheckWork selectMax();
+    //签退
+    int insertSignout(long cuid,String signin,String signout);
     //签到
     int insertCheck(long cuid,String username,String signin,int stat);
     //统计一个用户的所有签到情况

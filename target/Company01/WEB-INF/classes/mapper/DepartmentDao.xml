@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yh.company.dao.DepartmentDao">
+    <resultMap id="BaseResultMap" type="yh.company.entity.Department">
+        <id column="departmentid" property="departmentid"></id>
+        <result column="departmentname" property="departmentname"></result>
+    </resultMap>
+    <select id="selectById" resultType="Department">
+        select * from department where departmentid = #{departmentid};
+    </select>
+</mapper>

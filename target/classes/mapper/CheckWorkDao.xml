@@ -19,7 +19,7 @@
     </select>
 
     <update id="updateType">
-        update checkwork set type=2 where signin = #{signin} and cuid = #{cuid};
+        update checkwork set stat=1 where signin = #{signin} and cuid = #{cuid};
     </update>
 
     <update id="updateOut">
@@ -34,6 +34,11 @@
         SELECT * FROM checkwork WHERE cuid = #{cuid} AND checkwork_id = (SELECT MAX(checkwork_id) FROM checkwork);
     </select>
 
-
+    <insert id="insertSignout">
+        insert into checkwork(signout) values (#{signout}) where cuid = #{cuid} and signin = #{signin};
+    </insert>
+    <select id="selectMax" resultType="CheckWork">
+        select max(checkwork_id) from checkwork;
+    </select>
 
 </mapper>

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import yh.company.entity.CheckWork;
+import yh.company.entity.Department;
+import yh.company.service.DepartmentService;
 import yh.company.utils.Result;
 import yh.company.entity.User;
 import yh.company.service.CheckWorkService;
@@ -13,20 +15,21 @@ import yh.company.service.UserService;
 import yh.company.utils.Time;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
 @Controller
 @CrossOrigin
 public class UserController {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+   // private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private UserService userService;
 
     @Autowired
     private CheckWorkService checkWorkService;
+
+    @Autowired
+    private DepartmentService departmentService;
 
     // {"username":"王洋",
     //"sex":"男",
@@ -109,9 +112,7 @@ public class UserController {
                 CheckWork c = checkWorkService.check(user.getUserId());
                 int x = (int) (date.getTime()-Integer.parseInt(c.getSignin()));
                 if (x>43200000) {
-                    //System.out.println("============================"+time);
                     int j = checkWorkService.insertCheck(user.getUserId(), user.getUsername(), date.getTime()+"", stat);
-
                     if (j > 0) {
                         return new Result(user, "登录成功，签到成功", 1);
                     }
@@ -124,44 +125,81 @@ public class UserController {
                 //String time1 = String.valueOf(time.getTime());
                 //System.out.println("===================="+time1);
                 CheckWork c = checkWorkService.check(user.getUserId());
-                //System.out.println("====================122321--->" +(1+Integer.parseInt((s))));
-                String s = c.getSignin();
-                System.out.println("====================122321--->" +(Long.parseLong((s))));
-                int x = (int) (time.getTime()-Long.parseLong(s));
-                if(x>43200000){
-                    int i = checkWorkService.insertCheck(user.getUserId(), user.getUsername(), time.getTime()+"", stat);
-                    if(i>0){
-                        return new Result(user, "登录成功,迟到了", 1);
-                    }else{
-                        return new Result(user, "登录成功,你没有签到", 1);
-                    }
+                //System.out.println(c+"=================================11111");
+                if(c == null){
+                    checkWorkService.insertCheck(user.getUserId(),user.getUsername(),time.getTime()+"",+stat);
+                    return new Result(user,"登录成功，迟到了",1);
                 }else{
-                    return new Result(user,"登录成功，已经签过到了",1);
+                    return new Result(user,"登录成功，迟到了",1);
                 }
+//                int x = (int) (time.getTime());
+//                if(x>43200000){
+//                    int i = checkWorkService.insertCheck(user.getUserId(), user.getUsername(), time.getTime()+"", stat);
+//                    if(i>0){
+//                        return new Result(user, "登录成功,迟到了", 1);
+//                    }else{
+//                        return new Result(user, "登录成功,你没有签到", 1);
+//                    }
+//                }else{
+//                    return new Result(user,"登录成功，已---经签过到了",1);
+//                }
             }
         }
         return new Result(null, "登录失败", 0);
     }
 
     //通过工号查询（所有人）
+//    @RequestMapping(value = {"/home/personal/queryById"},method = RequestMethod.POST)
+//    @ResponseBody
+//    public Result  queryById(@RequestBody Map<String,Object> map,HttpServletRequest request){
+//        //从请求头中传过来userId，通过userId,得到对象中的所有数据，然后前端就不用多写什么，只需要操作的时候
+//       // 写一些必要数据。其中权限值，是通过userId,得到的，得到以后，再根据业务，判断，是否可以执行此操作。
+//        //long userId = Long.parseLong(request.getHeader("userId"));
+//        //System.out.println("-------"+request.getHeader("Content-Type"));
+//        long userId = Long.parseLong(request.getHeader("Authorization"));
+//       // User user = userService.queryById(userId1);
+//        if(userId <= 100000){
+//            return new Result(null,"查询失败",0);
+//        }else{
+//            User user = userService.queryById(userId);
+//            if(user != null){
+//                return new Result(user,"查询成功",1);
+//            }else{
+//                return new Result(null,"查询失败",0);
+//            }
+//        }
+//    }
+    //通过id查询用户信息
+    //查询所有（管理员）
     @RequestMapping(value = {"/home/personal/queryById"},method = RequestMethod.POST)
     @ResponseBody
-    public Result  queryById(@RequestBody Map<String,Object> map,HttpServletRequest request){
-        //从请求头中传过来userId，通过userId,得到对象中的所有数据，然后前端就不用多写什么，只需要操作的时候
-       // 写一些必要数据。其中权限值，是通过userId,得到的，得到以后，再根据业务，判断，是否可以执行此操作。
-        //long userId = Long.parseLong(request.getHeader("userId"));
-        //System.out.println("-------"+request.getHeader("Content-Type"));
-        long userId = Long.parseLong(request.getHeader("Authorization"));
-       // User user = userService.queryById(userId1);
-        if(userId <= 100000){
-            return new Result(null,"查询失败",0);
+    public Result queryById(@RequestBody Map<String, Object> map1,HttpServletRequest request){
+        String s = String.valueOf(map1.get("userId"));
+        long userId1 = 0;
+        if(s == null){
+            userId1 = Long.parseLong(request.getHeader("Authorization"));
         }else{
-            User user = userService.queryById(userId);
-            if(user != null){
-                return new Result(user,"查询成功",1);
+            userId1 = Long.parseLong(s);
+        }
+        Map<String,String> map = new HashMap<>();
+        User user = userService.queryById(userId1);
+        if(user != null){
+            Department department = departmentService.selectById(user.getDepartmentId());
+            if(department != null){
+                map.put("userId",user.getUserId()+"");
+                map.put("username",user.getUsername());
+                map.put("authority",user.getAuthority()+"");
+                map.put("departmentId",department.getDepartmentid()+"");
+                map.put("departmentname",department.getDepartmentname());
+                map.put("email",user.getEmail());
+                map.put("sex",user.getSex());
+                map.put("phone",user.getPhone()+"");
+                return new Result(map,"查询成功",1);
             }else{
                 return new Result(null,"查询失败",0);
             }
+        }else{
+            return new Result(null,"查询失败",0);
         }
     }
     //查询所有（管理员）
@@ -181,6 +219,7 @@ public class UserController {
             }
         }
     }
+
     //修改密码,通过电话和工号（所有人）
     @RequestMapping(value = {"/home/personal/updatePassword"},method = RequestMethod.POST)
     @ResponseBody

@@ -99,6 +99,11 @@ public class CheckWorkDaoTest {
         int stat = 0;
         int i = checkWorkDao.insertCheck(cuid,username,signin,stat);
         System.out.println("++++++++++++++++++++"+i);
+    }
+    @Test
+    public void test3(){
+        Date time = new Date();
+        long userId = 100001;
 
     }
 }
