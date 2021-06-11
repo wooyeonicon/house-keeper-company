@@ -124,7 +124,7 @@ public class UserController {
                 //String time1 = String.valueOf(time.getTime());
                 //System.out.println("===================="+time1);
                 CheckWork c = checkWorkService.check(user.getUserId());
-                //System.out.println("====================122321--->" +(1+Integer.parseInt((s))));
+                //System.out.println("==========ssss==========122321--->" +(1+Integer.parseInt((s))));
                 String s = c.getSignin();
                 System.out.println("====================122321--->" +(Long.parseLong((s))));
                 int x = (int) (time.getTime()-Long.parseLong(s));
