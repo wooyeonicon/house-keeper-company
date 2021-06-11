@@ -66,9 +66,8 @@ public class TxtController {
     @RequestMapping(value = {"/home/personal/queryTxtAll"},method = RequestMethod.POST)
     @ResponseBody
     public Result queryTxtAll(HttpServletRequest request){
-        long userId = Long.parseLong(request.getHeader("Authorization"));
+        //long userId = Long.parseLong(request.getHeader("Authorization"));
         List<Txt> lists = txtService.queryTxtAll();
-//        Txt txt = txtService.queryById(userId);
         if(lists.isEmpty()){
             return new Result(null,"查看失败",0);
         }else{

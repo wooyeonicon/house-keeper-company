@@ -11,12 +11,23 @@ import java.sql.Time;
 import java.util.List;
 @Service
 public class CheckWorkServiceImpl implements CheckWorkService {
+
+    @Override
+    public CheckWork selectMax() {
+        return (checkWorkDao.selectMax());
+    }
+
     @Autowired
     private CheckWorkDao checkWorkDao;
     @Override
     public int insertCheck(long cuid, String username, String signin,int stat) {
 
         return (checkWorkDao.insertCheck(cuid,username,signin,stat));
+    }
+
+    @Override
+    public int insertSignout(long cuid, String signin, String signout) {
+        return (checkWorkDao.insertSignout(cuid,signin,signout));
     }
 
     @Override

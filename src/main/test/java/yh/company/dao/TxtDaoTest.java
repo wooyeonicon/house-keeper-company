@@ -7,6 +7,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import yh.company.entity.Txt;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 //告诉junit spring配置文件
@@ -32,6 +33,11 @@ public class TxtDaoTest {
         System.out.println("_____________________________1");
         System.out.println(txtDao.queryTxtById(txtId));
         System.out.println("_____________________________");
+    }
+    @Test
+    public void Testall(){
+        List<Txt> txts = txtDao.queryTxtAll();
+        System.out.println(txts+"=========================");
     }
 
 }

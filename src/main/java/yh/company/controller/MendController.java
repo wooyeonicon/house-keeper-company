@@ -57,6 +57,7 @@ public class MendController {
         String[] arrss = arrs.split(",");
         int w = 0,s = 0,flag=0;
         for(int i=0;i<arrss.length;i++){
+            System.out.println(arrss[i]+"====================================");
             Mend mendById = mendService.getMendById(Integer.parseInt(arrss[i]));
             long userId = mendById.getUserId();
             User user = userService.queryById(userId);

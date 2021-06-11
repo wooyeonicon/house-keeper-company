@@ -24,6 +24,6 @@
     </select>
 
     <select id="queryTxtAll" resultMap="BaseResultMap">
-        select * from txt order by time+0 desc;
+        select * from txt order by txt_id desc;
     </select>
 </mapper>

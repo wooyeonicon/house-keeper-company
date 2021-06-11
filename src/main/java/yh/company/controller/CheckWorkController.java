@@ -11,6 +11,7 @@ import yh.company.service.CheckWorkService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -47,17 +48,41 @@ public class CheckWorkController {
     //签退(退出)
     @RequestMapping(value = {"/home/personal/unLogin"},method = RequestMethod.POST)
     @ResponseBody
-    public Result unLogin(@RequestBody Map<String,Object> map, HttpServletRequest request){
+    //@RequestBody Map<String,Object> map,
+    public Result unLogin( HttpServletRequest request){
         long userId = Long.parseLong(request.getHeader("Authorization"));
-        String signin = map.get("signin").toString();
-        String signout =map.get("time").toString();
-
-        int i = checkWorkService.updateOut(signout,userId,signin);
-        if(i<=0){
-            return new Result("签退失败",0);
-        }else{
+        Date time = new Date();
+        CheckWork c = checkWorkService.check(userId);
+        int i = checkWorkService.updateOut(time.getTime()+"",c.getCuid(),c.getSignin());
+        if(i>0){
             return new Result("签退成功",1);
+        }else{
+            return new Result("签退失败",0);
         }
+//        if(c.getSignout() == null){
+//            int i = checkWorkService.insertSignout(c.getCuid(), c.getSignin(),time.getTime()+"");
+//            if(i>0){
+//                return new Result("签退成功",1);
+//            }else{
+//                return new Result("签退失败",0);
+//            }
+//        }else{
+//            int i = checkWorkService.updateOut(time.getTime()+"",c.getCuid(),c.getSignin());
+//            if(i>0){
+//                return new Result("签退成功",1);
+//            }else{
+//                return new Result("签退失败",0);
+//            }
+//        }
+
+        //String signin = map.get("signin").toString();
+//        String signout =map.get("time").toString();
+//        int i = checkWorkService.updateOut(signout,userId,signin);
+//        if(i<=0){
+//            return new Result("签退失败",0);
+//        }else{
+//            return new Result("签退成功",1);
+//        }
     }
 
 }

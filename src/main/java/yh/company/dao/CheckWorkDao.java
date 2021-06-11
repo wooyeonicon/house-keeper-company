@@ -15,6 +15,10 @@ public interface CheckWorkDao {
     //    private Time signin;
     //    private Time signout;
     //    private Date date;
+    CheckWork selectMax();
+
+    int insertSignout(@Param("cuid") long cuid,@Param("signin") String signin,@Param("signout") String signout);
+
     CheckWork check(@Param("cuid") long cuid);
 
     //签到 默认为1，签上
