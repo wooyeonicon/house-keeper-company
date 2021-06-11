@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yh.company.dao.VacationDao">
+    <resultMap id="BaseResultMap" type="yh.company.entity.Vacation">
+        <id column="vacation_id" property="vacationId"></id>
+        <result column="username" property="username"></result>
+        <result column="vuid" property="vuid"></result>
+        <result column="starttime" property="starttime"></result>
+        <result column="endtime" property="endtime"></result>
+        <result column="type" property="type"></result>
+        <result column="cause" property="cause"></result>
+        <result column="state" property="state"></result>
+    </resultMap>
+    <insert id="insertVacation">
+        insert into vacation (username,vuid,starttime,endtime,type,cause) values (#{username},#{vuid},#{starttime},#{endtime},#{type},#{cause});
+    </insert>
+    <update id="updateState">
+        update vacation set state = #{state} where vacation_id = #{vacationId};
+    </update>
+
+    <select id="queryAllPass" resultMap="BaseResultMap">
+        select * from vacation where state=1;
+    </select>
+
+    <select id="queryAllReady" resultMap="BaseResultMap">
+        select * from vacation where state=0;
+    </select>
+
+    <delete id="deleteVacation">
+        delete from vacation where vuid = #{vuid} and state = 0;
+    </delete>
+
+    <select id="queryVacationByVuid" resultMap="BaseResultMap">
+        select * from vacation where vuid = #{vuid} and starttime = #{starttime};
+    </select>
+
+    <select id="queryVacationById" resultType="Vacation">
+        select * from vacation where vuid = #{vuid};
+    </select>
+
+    <select id="queryVacationByState" resultMap="BaseResultMap">
+        select * from vacation where vuid = #{vuid} and state = #{state};
+    </select>
+
+
+</mapper>

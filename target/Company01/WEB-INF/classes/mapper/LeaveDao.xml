@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yh.company.dao.LeaveDao">
+    <resultMap id="BaseResultMap" type="yh.company.entity.Leave">
+        <id column="leave_id" property="leaveId"></id>
+        <result column="user_id" property="userId"></result>
+        <result column="username" property="username"></result>
+        <result column="department_id" property="departmentId"></result>
+        <result column="post" property="post"></result>
+        <result column="type" property="type"></result>
+        <result column="cause" property="cause"></result>
+        <result column="state" property="state"></result>
+
+    </resultMap>
+
+
+    <insert id="insertLeave">
+        insert into leaving(user_id,username,department_id,post,type,cause) values(#{userId},#{username},#{departmentId},#{post},#{type},#{cause});
+    </insert>
+
+    <select id="queryAllLeave" resultMap="BaseResultMap">
+        select * from leaving where state=0;
+    </select>
+
+    <update id="updateLeave">
+        update leaving set state = #{state} where leave_id = #{leaveId};
+    </update>
+
+    <delete id="deleteLeave">
+        delete from leaving where user_id = #{userId};
+    </delete>
+
+    <delete id="deleteUser">
+        delete user,leaving from user inner join leaving on user.user_id=leaving.user_id where leaving.user_id = #{userId};
+    </delete>
+
+    <select id="queryLeaveByUserId" resultMap="BaseResultMap">
+        select * from leaving where user_id = #{userId};
+    </select>
+
+</mapper>

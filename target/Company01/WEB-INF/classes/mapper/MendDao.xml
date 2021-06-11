@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yh.company.dao.MendDao">
+    <resultMap id="BaseResultMap" type="yh.company.entity.Mend">
+        <id column="mend_id" property="mendId"></id>
+        <result column="user_id" property="userId"></result>
+        <result column="username" property="username"></result>
+        <result column="csignin" property="csignin"></result>
+        <result column="type" property="type"></result>
+        <result column="witness_id" property="witnessId"></result>
+        <result column="witness_name" property="witnessName"></result>
+        <result column="cause" property="cause"></result>
+    </resultMap>
+
+    <insert id="insertMend">
+        insert into mend(user_id,username,csignin,cause)
+        values(#{userId},#{username},#{csignin},#{cause});
+    </insert>
+
+    <update id="updateMend">
+        update mend set type = #{type},witness_id = #{witnessId},witness_name = #{witnessName} where mend_id = #{mendId};
+    </update>
+
+    <select id="getMendById" resultType="Mend">
+        select * from mend where mend_id = #{mendId};
+    </select>
+
+    <select id="queryAllMendSuccess" resultMap="BaseResultMap">
+        select * from mend where type = 1;
+    </select>
+
+    <select id="queryAllNoMend" resultMap="BaseResultMap">
+        select * from mend where type = 0;
+    </select>
+
+    <select id="queryByIdAllMend" resultMap="BaseResultMap">
+        select * from mend where user_id = #{userId} order by csignin+0 desc;
+    </select>
+
+    <select id="queryMendByUserId" resultMap="BaseResultMap">
+        select * from mend where user_id = #{userId} and csignin = #{csignin};
+    </select>
+</mapper>
